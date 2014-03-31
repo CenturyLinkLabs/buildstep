@@ -1,4 +1,4 @@
-FROM ubuntu:13.10
+FROM ubuntu:saucy
 MAINTAINER progrium "progrium@gmail.com"
 
 RUN mkdir /build
