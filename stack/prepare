@@ -6,9 +6,37 @@
 #
 # SYSTEM PACKAGES
 #
-apt-get update
-xargs apt-get install -y --force-yes < /build/packages.txt
-apt-get clean
+yum -y update
+xargs yum install -y --assumeyes < /build/packages.txt
+yum groupinstall "Development Tools"
+yum install -y curl-devel expat-devel gettext-devel openssl-devel zlib-devel gcc libyaml readline readline-devel
+
+cd /usr/local/src
+wget https://www.kernel.org/pub/software/scm/git/git-1.8.3.4.tar.gz
+tar xzvf git-1.8.3.4.tar.gz
+cd git-1.8.3.4
+export NO_PERL=1
+make prefix=/usr/local all 
+make prefix=/usr/local install
+
+cd /usr/local/src
+wget http://ftp.ruby-lang.org/pub/ruby/1.9/ruby-1.9.3-p194.tar.gz
+tar xvzf ruby-1.9.3-p194.tar.gz
+cd ruby-1.9.3-p194
+./configure
+make 
+make install 
+
+cd /usr/local/src
+wget http://rubyforge.org/frs/download.php/76073/rubygems-1.8.24.tgz
+tar xvzf rubygems-1.8.24.tgz
+cd rubygems-1.8.24
+ruby setup.rb
+
+gem update --system
+
+cd /
+rm -rf /usr/local/src/*
 
 #
 # SUPPORTED BUILDPACKS
@@ -24,4 +52,6 @@ xargs -L 1 git clone --depth=1 < /build/buildpacks.txt
 # Ruby buildpack system configuration
 update-alternatives --set ruby /usr/bin/ruby1.9.1
 update-alternatives --set gem /usr/bin/gem1.9.1
-gem install bundler
+wget http://rubygems.org/downloads/bundler-1.6.1.gem
+gem install bundler-1.6.1.gem
+rm bundler-1.6.1.gem
