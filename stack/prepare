@@ -9,7 +9,7 @@
 yum -y update
 xargs yum install -y --assumeyes < /build/packages.txt
 yum groupinstall "Development Tools"
-yum install -y curl-devel expat-devel gettext-devel openssl-devel zlib-devel gcc libyaml readline readline-devel php-pear
+yum install -y curl-devel expat-devel gettext-devel openssl-devel zlib-devel gcc libyaml readline readline-devel php-pear php-xml unixODBC bzip2-devel 
 
 cd /usr/local/src
 wget https://www.kernel.org/pub/software/scm/git/git-1.8.3.4.tar.gz
@@ -20,10 +20,10 @@ make prefix=/usr/local all
 make prefix=/usr/local install
 
 cd /usr/local/src
-wget http://ftp.ruby-lang.org/pub/ruby/1.9/ruby-1.9.3-p194.tar.gz
-tar xvzf ruby-1.9.3-p194.tar.gz
-cd ruby-1.9.3-p194
-./configure
+wget http://ftp.ruby-lang.org/pub/ruby/1.9/ruby-1.9.3-p545.tar.gz
+tar xvzf ruby-1.9.3-p545.tar.gz
+cd ruby-1.9.3-p545
+./configure --prefix=/usr
 make 
 make install 
 
@@ -32,11 +32,14 @@ wget http://rubyforge.org/frs/download.php/76073/rubygems-1.8.24.tgz
 tar xvzf rubygems-1.8.24.tgz
 cd rubygems-1.8.24
 ruby setup.rb
-
 gem update --system
 
 cd /
 rm -rf /usr/local/src/*
+
+cd /build/buildpacks/heroku-buildpack-php/
+gem install bundler
+bundle install
 
 #
 # SUPPORTED BUILDPACKS
